@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>潮流人格测试 - 问题1</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 20%"></div>
+        </div>
+        
+        <div class="card">
+            <h2>🌟 周末充电方式</h2>
+            <p>选择一个最适合你的周末计划</p>
+            <button class="btn" onclick="selectAnswer('A')">
+                🍵 宅家研究新菜谱
+            </button>
+            <button class="btn" onclick="selectAnswer('B')">
+                🍸 探访小众咖啡馆
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function selectAnswer(answer) {
+            // 保存答案
+            localStorage.setItem('q1', answer);
+            // 跳转到下一题
+            window.location.href = 'q2.html';
+        }
+    </script>
+</body>
+</html> 

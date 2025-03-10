@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>潮流人格测试 - 问题2</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 40%"></div>
+        </div>
+        
+        <div class="card">
+            <h2>👔 穿搭首要标准</h2>
+            <p>选择你最看重的穿搭要素</p>
+            <button class="btn" onclick="selectAnswer('A')">
+                📸 拍照是否出片
+            </button>
+            <button class="btn" onclick="selectAnswer('B')">
+                🧵 面料亲肤程度
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function selectAnswer(answer) {
+            localStorage.setItem('q2', answer);
+            window.location.href = 'q3.html';
+        }
+    </script>
+</body>
+</html> 

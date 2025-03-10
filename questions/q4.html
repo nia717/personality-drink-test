@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>潮流人格测试 - 问题4</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 80%"></div>
+        </div>
+        
+        <div class="card">
+            <h2>💫 社交能量场</h2>
+            <p>选择最符合你的社交角色</p>
+            <button class="btn" onclick="selectAnswer('A')">
+                🎤 话题引导者
+            </button>
+            <button class="btn" onclick="selectAnswer('B')">
+                🎧 安静观察员
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function selectAnswer(answer) {
+            localStorage.setItem('q4', answer);
+            window.location.href = 'q5.html';
+        }
+    </script>
+</body>
+</html> 

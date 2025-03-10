@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>潮流人格测试 - 问题5</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 100%"></div>
+        </div>
+        
+        <div class="card">
+            <h2>📱 手机相册最新</h2>
+            <p>选择最近拍摄最多的内容</p>
+            <button class="btn" onclick="selectAnswer('A')">
+                🍰 自制甜品九宫格
+            </button>
+            <button class="btn" onclick="selectAnswer('B')">
+                🌆 城市建筑光影
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function selectAnswer(answer) {
+            localStorage.setItem('q5', answer);
+            window.location.href = '../result.html';
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>潮流人格测试 - 测试结果</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .result-card {
+            background: linear-gradient(145deg, #ffffff, #f5f5f5);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-emoji {
+            font-size: 4em;
+            margin: 20px 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .result-name {
+            font-size: 1.8em;
+            margin: 15px 0;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+
+        .result-desc {
+            line-height: 1.8;
+            margin: 20px 0;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .share-btn {
+            background: linear-gradient(45deg, #ff6b88, #ff9d6c);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .restart-btn {
+            background: transparent;
+            border: 2px solid #ff6b88;
+            color: #ff6b88;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: #ff6b88;
+            color: white;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .decoration {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(255,157,108,0.1), rgba(255,107,136,0.1));
+            z-index: 0;
+        }
+
+        .decoration-1 {
+            top: -100px;
+            right: -100px;
+        }
+
+        .decoration-2 {
+            bottom: -100px;
+            left: -100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="result-card">
+            <div class="decoration decoration-1"></div>
+            <div class="decoration decoration-2"></div>
+            <div class="result-emoji" id="resultEmoji"></div>
+            <div class="result-name" id="resultName"></div>
+            <p class="result-desc" id="resultDesc"></p>
+            <button class="share-btn" onclick="shareResult()">
+                分享结果
+            </button>
+            <button class="restart-btn" onclick="restartTest()">
+                重新测试
+            </button>
+        </div>
+    </div>
+
+    <script src="js/results.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const result = getResult();
+            document.getElementById('resultEmoji').textContent = result.emoji;
+            document.getElementById('resultName').textContent = result.name;
+            document.getElementById('resultDesc').textContent = result.description;
+        });
+
+        function shareResult() {
+            const result = getResult();
+            const text = `我的潮流人格是：${result.name}！${result.description}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '潮流人格测试结果',
+                    text: text,
+                    url: window.location.href
+                });
+            } else {
+                // 如果不支持原生分享，可以复制到剪贴板
+                navigator.clipboard.writeText(text)
+                    .then(() => alert('结果已复制到剪贴板！'))
+                    .catch(() => alert('分享失败，请手动复制'));
+            }
+        }
+
+        function restartTest() {
+            // 清除本地存储的答案
+            localStorage.clear();
+            // 返回首页
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html> 
