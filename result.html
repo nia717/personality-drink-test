@@ -11,38 +11,64 @@
         gtag('js', new Date());
         gtag('config', 'G-453LPZFL7T');
     </script>
-    <title>潮流人格测试 - 测试结果</title>
+    <title>本命奶茶测试 - 测试结果</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         .result-card {
             background: linear-gradient(145deg, #ffffff, #f5f5f5);
             border-radius: 25px;
-            padding: 30px;
+            padding: clamp(20px, 5vw, 30px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             position: relative;
             overflow: hidden;
+            z-index: 1;
+            width: 100%;
+            max-width: 600px;
+            aspect-ratio: 3/4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .result-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(10px, 2vh, 20px);
         }
 
         .result-emoji {
-            font-size: 4em;
-            margin: 20px 0;
+            font-size: clamp(3em, 8vw, 4em);
             animation: float 3s ease-in-out infinite;
+            margin: 0;
         }
 
         .result-name {
-            font-size: 1.8em;
-            margin: 15px 0;
+            font-size: clamp(1.5em, 4vw, 1.8em);
+            margin: 0;
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: bold;
+            text-align: center;
+            padding: 0 10px;
         }
 
         .result-desc {
-            line-height: 1.8;
-            margin: 20px 0;
+            line-height: 1.6;
+            margin: 0;
             color: #666;
-            font-size: 1.1em;
+            font-size: clamp(0.9em, 2.5vw, 1.1em);
+            text-align: center;
+            padding: 0 clamp(10px, 3vw, 20px);
         }
 
         .share-btn {
@@ -85,34 +111,115 @@
 
         .decoration {
             position: absolute;
-            width: 200px;
-            height: 200px;
+            width: 50%;
+            height: 50%;
             border-radius: 50%;
             background: linear-gradient(45deg, rgba(255,157,108,0.1), rgba(255,107,136,0.1));
             z-index: 0;
         }
 
         .decoration-1 {
-            top: -100px;
-            right: -100px;
+            top: -25%;
+            right: -25%;
         }
 
         .decoration-2 {
-            bottom: -100px;
-            left: -100px;
+            bottom: -25%;
+            left: -25%;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .save-image-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .save-image-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        #resultImage {
+            max-width: 100%;
+            width: 100%;
+            height: auto;
+            display: none;
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            aspect-ratio: 3/4;
+            object-fit: contain;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .result-card {
+                aspect-ratio: 3/4;
+                padding: 15px;
+            }
+
+            .result-content {
+                gap: 15px;
+            }
+
+            .result-desc {
+                font-size: 0.9em;
+                padding: 0 10px;
+            }
+        }
+
+        @media (min-width: 481px) {
+            .result-card {
+                aspect-ratio: 4/3;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="result-card">
+        <div class="result-card" id="resultCard">
             <div class="decoration decoration-1"></div>
             <div class="decoration decoration-2"></div>
-            <div class="result-emoji" id="resultEmoji"></div>
-            <div class="result-name" id="resultName"></div>
-            <p class="result-desc" id="resultDesc"></p>
+            <div class="result-content">
+                <div class="result-emoji" id="resultEmoji"></div>
+                <div class="result-name" id="resultName"></div>
+                <p class="result-desc" id="resultDesc"></p>
+            </div>
+        </div>
+        <img id="resultImage" alt="测试结果图片" />
+        <div class="action-buttons">
             <button class="share-btn" onclick="shareResult()">
                 分享结果
+            </button>
+            <button class="save-image-btn" onclick="generateAndSaveImage()">
+                保存图片
             </button>
             <button class="restart-btn" onclick="restartTest()">
                 重新测试
@@ -129,13 +236,59 @@
             document.getElementById('resultDesc').textContent = result.description;
         });
 
+        async function generateAndSaveImage() {
+            const btn = document.querySelector('.save-image-btn');
+            const originalText = btn.textContent;
+            btn.innerHTML = '生成中... <span class="loading"></span>';
+            btn.disabled = true;
+
+            try {
+                const resultCard = document.getElementById('resultCard');
+                const isMobile = window.innerWidth <= 480;
+                
+                // 设置生成图片的尺寸
+                const width = Math.min(600, window.innerWidth - 40); // 减去padding
+                const height = isMobile ? (width * 4/3) : (width * 3/4);
+                
+                const canvas = await html2canvas(resultCard, {
+                    scale: 2,
+                    width: width,
+                    height: height,
+                    backgroundColor: null,
+                    logging: false,
+                    useCORS: true,
+                    windowWidth: width,
+                    windowHeight: height
+                });
+
+                // 将canvas转换为图片
+                const image = canvas.toDataURL('image/png');
+                const resultImage = document.getElementById('resultImage');
+                resultImage.src = image;
+                resultImage.style.display = 'block';
+
+                // 创建下载链接
+                const link = document.createElement('a');
+                link.download = '我的本命奶茶.png';
+                link.href = image;
+                link.click();
+
+            } catch (error) {
+                console.error('生成图片失败:', error);
+                alert('生成图片失败，请重试');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
         function shareResult() {
             const result = getResult();
-            const text = `我的潮流人格是：${result.name}！${result.description}`;
+            const text = `我的本命奶茶是：${result.name}！${result.description}`;
             
             if (navigator.share) {
                 navigator.share({
-                    title: '潮流人格测试结果',
+                    title: '本命奶茶测试结果',
                     text: text,
                     url: window.location.href
                 });
@@ -148,9 +301,7 @@
         }
 
         function restartTest() {
-            // 清除本地存储的答案
             localStorage.clear();
-            // 返回首页
             window.location.href = 'index.html';
         }
     </script>
